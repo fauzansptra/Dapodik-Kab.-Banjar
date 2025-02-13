@@ -12,12 +12,11 @@ return new class extends Migration {
             $table->string('NamaSekolah')->index();
             $table->string('NPSN')->unique();
             $table->string('BentukPendidikan');
-            $table->enum('Status', ['Negeri', 'Swasta']);
+            $table->string('Status');
             $table->timestamp('LastSync')->useCurrent();
             $table->integer('JmlSync')->default(0);
             $table->foreignId('KecamatanID')->constrained('kecamatans', 'KecamatanID')->onDelete('cascade');
-            $table->string('TahunAjaran');
-            $table->enum('Semester', ['Ganjil', 'Genap']);
+            $table->string('Semester');
             $table->integer('JumlahPesertaDidik')->default(0);
             $table->integer('JumlahGuru')->default(0);
             $table->integer('JumlahPegawai')->default(0);

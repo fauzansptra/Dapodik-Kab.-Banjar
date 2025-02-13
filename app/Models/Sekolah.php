@@ -22,7 +22,6 @@ class Sekolah extends Model
         'LastSync',
         'JmlSync',
         'KecamatanID',
-        'TahunAjaran',
         'Semester',
         'JumlahPesertaDidik',
         'JumlahGuru',
