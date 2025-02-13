@@ -22,3 +22,32 @@ Masyarakat dapat melihat data sekolah, tetapi hanya **admin** yang memiliki akse
 ## 📌 Database Diagram
 
 ![Database Diagram](docs/db_diagram.png)
+
+## ✅ How to Contribute
+
+### 1. Setup Environment
+
+Pastikan file .env sudah dikonfigurasi dengan MySQL sebagai database utama.
+
+Contoh konfigurasi .env:
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nama_database
+DB_USERNAME=root
+DB_PASSWORD=yourpassword
+
+### 2. Install Dependencies
+
+Jalankan perintah berikut untuk menginstal dependensi:
+
+composer install
+
+### 3. Jalankan Migrasi dan Seeder
+
+Setelah konfigurasi .env benar, jalankan perintah berikut:
+
+php artisan migrate --seed
+
+Perintah ini akan membuat tabel di database dan mengisi data awal.
