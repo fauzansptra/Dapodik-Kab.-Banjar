@@ -5,6 +5,8 @@ namespace App\Filament\Resources\SekolahResource\Pages;
 use App\Filament\Resources\SekolahResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\SekolahResource\Widgets\SekolahStatsWidget;
+
 
 class ListSekolahs extends ListRecords
 {
@@ -14,6 +16,12 @@ class ListSekolahs extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+        ];
+    }
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            SekolahStatsWidget::class,
         ];
     }
 }
