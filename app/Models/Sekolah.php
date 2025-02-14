@@ -2,10 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-namespace App\Models;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,12 +17,7 @@ class Sekolah extends Model
         'Status',
         'LastSync',
         'JmlSync',
-        'KecamatanID',
-        'Semester',
-        'JumlahPesertaDidik',
-        'JumlahGuru',
-        'JumlahPegawai',
-        'JumlahRombel'
+        'KecamatanID'
     ];
 
     public function kecamatan()
@@ -34,8 +25,8 @@ class Sekolah extends Model
         return $this->belongsTo(Kecamatan::class, 'KecamatanID');
     }
 
-    public function ruangans()
+    public function sekolahTahun()
     {
-        return $this->hasMany(Ruangan::class, 'SekolahID');
+        return $this->hasMany(SekolahTahun::class, 'SekolahID');
     }
 }
