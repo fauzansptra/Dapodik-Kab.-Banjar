@@ -15,6 +15,8 @@ class SekolahSeeder extends Seeder
 {
     public function run()
     {
+        $hasError = false; // Flag to track if an error occurs
+
         try {
             $filePath = storage_path('app/dataset.xlsx');
 
@@ -30,44 +32,44 @@ class SekolahSeeder extends Seeder
             foreach ($rows as $index => $row) {
                 if ($index == 1) continue; // Skip header row
 
-                $namaSekolah = trim($row['B'] ?? '');
-                $npsn = trim($row['C'] ?? '');
-                $bentukPendidikan = trim($row['D'] ?? '');
-                $status = trim($row['E'] ?? '');
-                $lastSyncRaw = trim($row['F'] ?? '');
-                $jmlSync = (int) ($row['G'] ?? 0);
-                $jumlahPesertaDidik = (int) ($row['H'] ?? 0);
-                $jumlahRombel = (int) ($row['I'] ?? 0);
-                $jumlahGuru = (int) ($row['J'] ?? 0);
-                $jumlahPegawai = (int) ($row['K'] ?? 0);
-                $tahun = (int) ($row['O'] ?? 0); // Changed from Semester to Tahun
-                $namaKecamatan = trim($row['P'] ?? '');
-
-                if (empty($namaKecamatan)) {
-                    dump("⚠️ Skipping row {$index}: Kecamatan is empty");
-                    continue;
-                }
-
-                $kecamatan = Kecamatan::firstOrCreate(
-                    ['NamaKecamatan' => ucfirst(strtolower($namaKecamatan))],
-                    ['created_at' => now(), 'updated_at' => now()]
-                );
-
-                if (!$kecamatan || !$kecamatan->KecamatanID) {
-                    dump("⚠️ Skipping row {$index}: Failed to create/find Kecamatan '{$namaKecamatan}'");
-                    continue;
-                }
-
-                $lastSync = null;
-                if (!empty($lastSyncRaw)) {
-                    try {
-                        $lastSync = Carbon::createFromFormat('d M Y H:i:s', $lastSyncRaw)->format('Y-m-d H:i:s');
-                    } catch (\Exception $e) {
-                        $lastSync = now();
-                    }
-                }
-
                 try {
+                    $namaSekolah = trim($row['B'] ?? '');
+                    $npsn = trim($row['C'] ?? '');
+                    $bentukPendidikan = trim($row['D'] ?? '');
+                    $status = trim($row['E'] ?? '');
+                    $lastSyncRaw = trim($row['F'] ?? '');
+                    $jmlSync = (int) ($row['G'] ?? 0);
+                    $jumlahPesertaDidik = (int) ($row['H'] ?? 0);
+                    $jumlahRombel = (int) ($row['I'] ?? 0);
+                    $jumlahGuru = (int) ($row['J'] ?? 0);
+                    $jumlahPegawai = (int) ($row['K'] ?? 0);
+                    $tahun = (int) ($row['O'] ?? 0);
+                    $namaKecamatan = trim($row['P'] ?? '');
+
+                    if (empty($namaKecamatan)) {
+                        dump("⚠️ Skipping row {$index}: Kecamatan is empty");
+                        continue;
+                    }
+
+                    $kecamatan = Kecamatan::firstOrCreate(
+                        ['NamaKecamatan' => ucfirst(strtolower($namaKecamatan))],
+                        ['created_at' => now(), 'updated_at' => now()]
+                    );
+
+                    if (!$kecamatan || !$kecamatan->KecamatanID) {
+                        dump("⚠️ Skipping row {$index}: Failed to create/find Kecamatan '{$namaKecamatan}'");
+                        continue;
+                    }
+
+                    $lastSync = null;
+                    if (!empty($lastSyncRaw)) {
+                        try {
+                            $lastSync = Carbon::createFromFormat('d M Y H:i:s', $lastSyncRaw)->format('Y-m-d H:i:s');
+                        } catch (\Exception $e) {
+                            $lastSync = now();
+                        }
+                    }
+
                     $sekolah = Sekolah::firstOrCreate(
                         ['NPSN' => $npsn],
                         [
@@ -84,8 +86,6 @@ class SekolahSeeder extends Seeder
                         dump("⚠️ Skipping row {$index}: Failed to create Sekolah '{$namaSekolah}' (NPSN: {$npsn})");
                         continue;
                     }
-
-                    // dump("✅ Inserted/Retrieved Sekolah: {$sekolah->NamaSekolah} (ID: {$sekolah->id})");
 
                     $sekolahTahun = SekolahTahun::firstOrCreate(
                         ['SekolahID' => $sekolah->SekolahID, 'Tahun' => $tahun],
@@ -115,13 +115,19 @@ class SekolahSeeder extends Seeder
                     }
                 } catch (\Exception $e) {
                     dump("❌ Error in row {$index}: {$e->getMessage()}");
+                    $hasError = true; // Set error flag
                     continue;
                 }
             }
         } catch (\Exception $e) {
             dump("❌ Seeder failed: " . $e->getMessage());
+            $hasError = true; // Set error flag
         } finally {
-            dump("✅ Seeding success");
+            if (!$hasError) {
+                dump("✅ Seeding completed successfully!");
+            } else {
+                dump("⚠️ Seeding completed with errors.");
+            }
         }
     }
 }
