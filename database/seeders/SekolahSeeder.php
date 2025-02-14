@@ -85,7 +85,7 @@ class SekolahSeeder extends Seeder
                         continue;
                     }
 
-                    dump("✅ Inserted/Retrieved Sekolah: {$sekolah->NamaSekolah} (ID: {$sekolah->id})");
+                    // dump("✅ Inserted/Retrieved Sekolah: {$sekolah->NamaSekolah} (ID: {$sekolah->id})");
 
                     $sekolahTahun = SekolahTahun::firstOrCreate(
                         ['SekolahID' => $sekolah->SekolahID, 'Tahun' => $tahun],
@@ -120,6 +120,8 @@ class SekolahSeeder extends Seeder
             }
         } catch (\Exception $e) {
             dump("❌ Seeder failed: " . $e->getMessage());
+        } finally {
+            dump("✅ Seeding success");
         }
     }
 }
