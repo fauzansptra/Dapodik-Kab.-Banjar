@@ -5,7 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Sekolah;
 use App\Models\Kecamatan;
-use App\Models\Ruangan;
+use App\Models\RuanganTahun;
+use App\Models\SekolahTahun;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +16,6 @@ class SekolahSeeder extends Seeder
     public function run()
     {
         try {
-            // Load Excel file from storage
             $filePath = storage_path('app/dataset.xlsx');
 
             if (!file_exists($filePath)) {
@@ -30,7 +30,6 @@ class SekolahSeeder extends Seeder
             foreach ($rows as $index => $row) {
                 if ($index == 1) continue; // Skip header row
 
-                // ✅ Trim and clean values
                 $namaSekolah = trim($row['B'] ?? '');
                 $npsn = trim($row['C'] ?? '');
                 $bentukPendidikan = trim($row['D'] ?? '');
@@ -41,16 +40,14 @@ class SekolahSeeder extends Seeder
                 $jumlahRombel = (int) ($row['I'] ?? 0);
                 $jumlahGuru = (int) ($row['J'] ?? 0);
                 $jumlahPegawai = (int) ($row['K'] ?? 0);
-                $semester = trim($row['O'] ?? '');
+                $tahun = (int) ($row['O'] ?? 0); // Changed from Semester to Tahun
                 $namaKecamatan = trim($row['P'] ?? '');
 
-                // ✅ Handle missing Kecamatan
                 if (empty($namaKecamatan)) {
                     dump("⚠️ Skipping row {$index}: Kecamatan is empty");
                     continue;
                 }
 
-                // ✅ Find or create Kecamatan
                 $kecamatan = Kecamatan::firstOrCreate(
                     ['NamaKecamatan' => ucfirst(strtolower($namaKecamatan))],
                     ['created_at' => now(), 'updated_at' => now()]
@@ -61,31 +58,24 @@ class SekolahSeeder extends Seeder
                     continue;
                 }
 
-                // ✅ Convert LastSync to proper format
                 $lastSync = null;
                 if (!empty($lastSyncRaw)) {
                     try {
                         $lastSync = Carbon::createFromFormat('d M Y H:i:s', $lastSyncRaw)->format('Y-m-d H:i:s');
                     } catch (\Exception $e) {
-                        $lastSync = now(); // Default to current timestamp if parsing fails
+                        $lastSync = now();
                     }
                 }
 
                 try {
-                    // ✅ Find or create Sekolah
                     $sekolah = Sekolah::firstOrCreate(
-                        ['NPSN' => $npsn], // Search by unique column
+                        ['NPSN' => $npsn],
                         [
                             'NamaSekolah'        => $namaSekolah,
                             'BentukPendidikan'   => $bentukPendidikan,
                             'Status'             => $status,
                             'LastSync'           => $lastSync,
                             'JmlSync'            => $jmlSync,
-                            'JumlahPesertaDidik' => $jumlahPesertaDidik,
-                            'JumlahRombel'       => $jumlahRombel,
-                            'JumlahGuru'         => $jumlahGuru,
-                            'JumlahPegawai'      => $jumlahPegawai,
-                            'Semester'           => $semester,
                             'KecamatanID'        => $kecamatan->KecamatanID,
                         ]
                     );
@@ -97,7 +87,16 @@ class SekolahSeeder extends Seeder
 
                     dump("✅ Inserted/Retrieved Sekolah: {$sekolah->NamaSekolah} (ID: {$sekolah->id})");
 
-                    // ✅ Insert into Ruangan table
+                    $sekolahTahun = SekolahTahun::firstOrCreate(
+                        ['SekolahID' => $sekolah->SekolahID, 'Tahun' => $tahun],
+                        [
+                            'JumlahPesertaDidik' => $jumlahPesertaDidik,
+                            'JumlahGuru'         => $jumlahGuru,
+                            'JumlahPegawai'      => $jumlahPegawai,
+                            'JumlahRombel'       => $jumlahRombel,
+                        ]
+                    );
+
                     $ruanganTypes = [
                         'L' => ['jenis' => 'Kelas'],
                         'M' => ['jenis' => 'Lab'],
@@ -107,10 +106,10 @@ class SekolahSeeder extends Seeder
                     foreach ($ruanganTypes as $column => $data) {
                         $jumlah = (int) ($row[$column] ?? 0);
                         if ($jumlah > 0) {
-                            Ruangan::create([
-                                'SekolahID' => $sekolah->SekolahID,
-                                'Jenis'     => $data['jenis'],
-                                'Jumlah'    => $jumlah,
+                            RuanganTahun::create([
+                                'SekolahTahunID' => $sekolahTahun->SekolahTahunID,
+                                'JenisRuangan'    => $data['jenis'],
+                                'Jumlah'         => $jumlah,
                             ]);
                         }
                     }
