@@ -36,37 +36,37 @@ class SekolahResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('NamaSekolah')->required(),
-                TextInput::make('NPSN')->required()->label('NPSN'),
+                TextInput::make('nama_sekolah')->required(),
+                TextInput::make('npsn')->required()->label('NPSN'),
                 Forms\Components\Select::make('bentuk_pendidikan')
-                ->options([
-                    'TK' => 'TK',
-                    'KB' => 'KB',
-                    'TPA' => 'TPA',
-                    'SMK' => 'SMK',
-                    'PKBM' => 'PKBM',
-                    'SLB' => 'SLB',
-                    'SKB' => 'SKB',
-                    'SD' => 'SD',
-                    'SMP' => 'SMP',
-                    'SMA' => 'SMA',
-                ])
-                ->searchable()
-                ->required(),
-            
-            Forms\Components\Select::make('status')
-                ->options([
-                    'Negeri' => 'Negeri',
-                    'Swasta' => 'Swasta',
-                ])
-                ->required(),
-            
-            Forms\Components\Select::make('kecamatan_id')
-                ->label('Kecamatan')
-                ->relationship('kecamatan', 'NamaKecamatan')
-                ->searchable()
-                ->required(),
-            
+                    ->options([
+                        'TK' => 'TK',
+                        'KB' => 'KB',
+                        'TPA' => 'TPA',
+                        'SMK' => 'SMK',
+                        'PKBM' => 'PKBM',
+                        'SLB' => 'SLB',
+                        'SKB' => 'SKB',
+                        'SD' => 'SD',
+                        'SMP' => 'SMP',
+                        'SMA' => 'SMA',
+                    ])
+                    ->searchable()
+                    ->required(),
+
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'Negeri' => 'Negeri',
+                        'Swasta' => 'Swasta',
+                    ])
+                    ->required(),
+
+                Forms\Components\Select::make('kecamatan_id')
+                    ->label('Kecamatan')
+                    ->relationship('kecamatan', 'nama_kecamatan')
+                    ->searchable()
+                    ->required(),
+
             ]);
     }
     public static function infolist(Infolist $infolist): Infolist
@@ -79,15 +79,30 @@ class SekolahResource extends Resource
                             Components\Grid::make(2)
                                 ->schema([
                                     Components\Group::make([
-                                        Components\TextEntry::make('NamaSekolah'),
-                                        Components\TextEntry::make('NPSN'),
-                                        Components\TextEntry::make('BentukPendidikan')
-                                            ->badge()
-                                            ->color('success'),
+                                        Components\TextEntry::make('nama_sekolah'),
+                                        Components\TextEntry::make('npsn')->label('NPSN'),
+                                        Components\TextEntry::make('bentuk_pendidikan')
+                                        ->badge()
+                                        ->color(function (string $state): string {
+                                            return match (true) {
+                                                in_array($state, ['TPA', 'KB', 'TK']) => 'success', // PAUD
+                                                in_array($state, ['SD', 'SLB']) => 'danger', // Pendidikan Dasar
+                                                in_array($state, ['SMP', 'SMA', 'SMK']) => 'info', // Pendidikan Menengah
+                                                in_array($state, ['PKBM', 'SKB']) => 'primary', // Nonformal/Kesetaraan
+                                                default => 'gray',
+                                            };
+                                        }),
+                                    
                                     ]),
                                     Components\Group::make([
-                                        Components\TextEntry::make('Status'),
-                                        Components\TextEntry::make('Kecamatan.NamaKecamatan')
+                                        Components\TextEntry::make('status')
+                                            ->badge()
+                                            ->color(fn(string $state): string => match ($state) {
+                                                'Negeri' => 'info',
+                                                'Swasta' => 'success',
+                                                default => 'gray',
+                                            }),
+                                        Components\TextEntry::make('Kecamatan.nama_kecamatan')
                                     ]),
                                 ]),
                         ])->from('lg'),
@@ -95,64 +110,64 @@ class SekolahResource extends Resource
             ]);
     }
 
-    
+
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('NamaSekolah')
+                TextColumn::make('nama_sekolah')
                     ->label('Nama Sekolah')
                     ->extraAttributes(['style' => 'width: 300px;'])
 
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('NPSN')
+                TextColumn::make('npsn')
                     ->label('NPSN')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('BentukPendidikan')
+                TextColumn::make('bentuk_pendidikan')
                     ->label('Bentuk Pendidikan')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('Status')
+                TextColumn::make('status')
                     ->label('Status')
                     ->sortable(),
-                TextColumn::make('kecamatan.NamaKecamatan')
+                TextColumn::make('kecamatan.nama_kecamatan')
                     ->label('Kecamatan')
                     ->sortable(),
             ])
             ->filters([
-                SelectFilter::make('BentukPendidikan')
-                ->options([
-                    'TK' => 'TK',
-                    'KB' => 'KB',
-                    'TPA' => 'TPA',
-                    'SMK' => 'SMK',
-                    'PKBM' => 'PKBM',
-                    'SLB' => 'SLB',
-                    'SKB' => 'SKB',
-                    'SD' => 'SD',
-                    'SMP' => 'SMP',
-                    'SMA' => 'SMA',
-                ])
-                ->label('Bentuk Pendidikan')
-                ->placeholder('Semua')
-                ->multiple(),
+                SelectFilter::make('bentuk_pendidikan')
+                    ->options([
+                        'TK' => 'TK',
+                        'KB' => 'KB',
+                        'TPA' => 'TPA',
+                        'SMK' => 'SMK',
+                        'PKBM' => 'PKBM',
+                        'SLB' => 'SLB',
+                        'SKB' => 'SKB',
+                        'SD' => 'SD',
+                        'SMP' => 'SMP',
+                        'SMA' => 'SMA',
+                    ])
+                    ->label('Bentuk Pendidikan')
+                    ->placeholder('Semua')
+                    ->multiple(),
 
-            SelectFilter::make('status')
-                ->options([
-                    'Negeri' => 'Negeri',
-                    'Swasta' => 'Swasta',
-                ])
-                ->label('Status')
-                ->placeholder('Semua'),
+                SelectFilter::make('status')
+                    ->options([
+                        'Negeri' => 'Negeri',
+                        'Swasta' => 'Swasta',
+                    ])
+                    ->label('Status')
+                    ->placeholder('Semua'),
 
-            SelectFilter::make('KecamatanId')
-                ->options(fn() => Kecamatan::pluck('nama', 'id')->toArray())
-                ->label('Kecamatan')
-                ->placeholder('Semua')
-                ->relationship('kecamatan', 'NamaKecamatan'),
+                SelectFilter::make('KecamatanId')
+                    ->options(fn() => Kecamatan::pluck('nama', 'id')->toArray())
+                    ->label('Kecamatan')
+                    ->placeholder('Semua')
+                    ->relationship('kecamatan', 'nama_kecamatan'),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()->label('Detail'),
