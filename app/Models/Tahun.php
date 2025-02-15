@@ -9,13 +9,13 @@ class Tahun extends Model
 {
     use HasFactory;
 
-    protected $table = 'tahuns';
-    protected $primaryKey = 'TahunID';
+    protected $table = 'tahun';
+    protected $primaryKey = 'id';
 
-    protected $fillable = ['Tahun'];
+    protected $fillable = ['tahun'];
 
     public function sekolahTahun()
     {
-        return $this->hasMany(SekolahTahun::class, 'TahunID', 'TahunID');
+        return $this->hasMany(SekolahTahun::class, 'tahun_id');
     }
 }

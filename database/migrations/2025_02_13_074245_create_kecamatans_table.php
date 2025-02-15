@@ -8,8 +8,8 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('kecamatan', function (Blueprint $table) {
-            $table->id('KecamatanID');
-            $table->string('NamaKecamatan')->index();
+            $table->id('id');
+            $table->string('nama_kecamatan')->index();
             $table->timestamps();
         });
     }

@@ -8,10 +8,10 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('ruangan_tahun', function (Blueprint $table) {
-            $table->id('RuanganTahunID');
-            $table->foreignId('SekolahTahunID')->constrained('sekolah_tahun', 'SekolahTahunID')->onDelete('cascade');
-            $table->enum('JenisRuangan', ['Kelas', 'Lab', 'Perpustakaan']);
-            $table->integer('Jumlah')->default(0);
+            $table->id('id');
+            $table->foreignId('sekolah_tahun_id')->constrained('sekolah_tahun')->onDelete('cascade');
+            $table->enum('jenis_ruangan', ['kelas', 'lab', 'perpustakaan']);
+            $table->integer('jumlah')->default(0);
             $table->timestamps();
         });
     }

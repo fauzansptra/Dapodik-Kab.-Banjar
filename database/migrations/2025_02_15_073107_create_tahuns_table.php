@@ -7,15 +7,15 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
-        Schema::create('tahuns', function (Blueprint $table) {
-            $table->id('TahunID');
-            $table->year('Tahun')->unique();
+        Schema::create('tahun', function (Blueprint $table) {
+            $table->id('id');
+            $table->year('tahun')->unique();
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('tahuns');
+        Schema::dropIfExists('tahun');
     }
 };

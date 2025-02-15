@@ -8,10 +8,10 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('admins', function (Blueprint $table) {
-            $table->id('AdminID');
-            $table->string('Nama');
-            $table->string('Email')->unique();
-            $table->string('Password');
+            $table->id('id');
+            $table->string('nama');
+            $table->string('email')->unique();
+            $table->string('password');
             $table->timestamps();
         });
     }

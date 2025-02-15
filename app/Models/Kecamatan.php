@@ -14,11 +14,11 @@ class Kecamatan extends Model
     use HasFactory;
     protected $table = 'kecamatan'; // Custom table name
 
-    protected $primaryKey = 'KecamatanID';
-    protected $fillable = ['NamaKecamatan'];
+    protected $primaryKey = 'id';
+    protected $fillable = ['nama_kecamatan'];
 
     public function sekolah()
     {
-        return $this->hasMany(Sekolah::class, 'KecamatanID');
+        return $this->hasMany(Sekolah::class, 'kecamatan_id');
     }
 }
