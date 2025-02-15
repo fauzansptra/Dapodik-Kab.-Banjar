@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class SekolahTahun extends Model
 {
     use HasFactory;
-    protected $table = 'sekolah_tahun'; // Custom table name
 
-
+    protected $table = 'sekolah_tahun';
     protected $primaryKey = 'SekolahTahunID';
+
     protected $fillable = [
         'SekolahID',
-        'Tahun',
+        'TahunID', // Updated
         'JumlahPesertaDidik',
         'JumlahGuru',
         'JumlahPegawai',
@@ -29,5 +29,10 @@ class SekolahTahun extends Model
     public function ruangan()
     {
         return $this->hasMany(RuanganTahun::class, 'SekolahTahunID');
+    }
+
+    public function tahun()
+    {
+        return $this->belongsTo(Tahun::class, 'TahunID', 'TahunID');
     }
 }

@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('sekolah_tahun', function (Blueprint $table) {
             $table->id('SekolahTahunID');
             $table->foreignId('SekolahID')->constrained('sekolah', 'SekolahID')->onDelete('cascade');
-            $table->year('Tahun');
+            $table->foreignId('TahunID')->constrained('tahuns', 'TahunID')->onDelete('cascade'); // Updated
             $table->integer('JumlahPesertaDidik')->default(0);
             $table->integer('JumlahGuru')->default(0);
             $table->integer('JumlahPegawai')->default(0);
