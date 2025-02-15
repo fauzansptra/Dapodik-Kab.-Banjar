@@ -10,11 +10,11 @@ class RuanganTahun extends Model
     use HasFactory;
     protected $table = 'ruangan_tahun'; // Custom table name
 
-    protected $primaryKey = 'RuanganTahunID';
-    protected $fillable = ['SekolahTahunID', 'JenisRuangan', 'Jumlah'];
+    protected $primaryKey = 'id';
+    protected $fillable = ['sekolah_tahun_id', 'jenis_ruangan', 'jumlah'];
 
     public function sekolahTahun()
     {
-        return $this->belongsTo(SekolahTahun::class, 'SekolahTahunID');
+        return $this->belongsTo(SekolahTahun::class, 'sekolah_tahun_id');
     }
 }

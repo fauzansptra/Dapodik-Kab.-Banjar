@@ -13,6 +13,6 @@ class Admin extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'AdminID';
-    protected $fillable = ['Nama', 'Email', 'Password'];
+    protected $primaryKey = 'id';
+    protected $fillable = ['nama', 'email', 'password'];
 }

@@ -7,6 +7,7 @@ use App\Models\Sekolah;
 use App\Models\Kecamatan;
 use App\Models\RuanganTahun;
 use App\Models\SekolahTahun;
+use App\Models\Tahun; // Ensure Tahun model is imported
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -43,7 +44,7 @@ class SekolahSeeder extends Seeder
                     $jumlahRombel = (int) ($row['I'] ?? 0);
                     $jumlahGuru = (int) ($row['J'] ?? 0);
                     $jumlahPegawai = (int) ($row['K'] ?? 0);
-                    $tahun = (int) ($row['O'] ?? 0);
+                    $tahunValue = (int) ($row['O'] ?? 0);
                     $namaKecamatan = trim($row['P'] ?? '');
 
                     if (empty($namaKecamatan)) {
@@ -51,15 +52,27 @@ class SekolahSeeder extends Seeder
                         continue;
                     }
 
+                    // Find or create Kecamatan
                     $kecamatan = Kecamatan::firstOrCreate(
-                        ['NamaKecamatan' => ucfirst(strtolower($namaKecamatan))],
+                        ['nama_kecamatan' => ucfirst(strtolower($namaKecamatan))],
                         ['created_at' => now(), 'updated_at' => now()]
                     );
 
-                    if (!$kecamatan || !$kecamatan->KecamatanID) {
+                    if (!$kecamatan || !$kecamatan->id) {
                         dump("⚠️ Skipping row {$index}: Failed to create/find Kecamatan '{$namaKecamatan}'");
                         continue;
                     }
+
+                    if ($tahunValue === 0) {
+                        dump("⚠️ Skipping row {$index}: Tahun is missing or invalid");
+                        continue;
+                    }
+
+                    // Find or create Tahun
+                    $tahun = Tahun::firstOrCreate(
+                        ['tahun' => $tahunValue],
+                        ['created_at' => now(), 'updated_at' => now()]
+                    );
 
                     $lastSync = null;
                     if (!empty($lastSyncRaw)) {
@@ -70,33 +83,36 @@ class SekolahSeeder extends Seeder
                         }
                     }
 
+                    // Find or create Sekolah
                     $sekolah = Sekolah::firstOrCreate(
                         ['NPSN' => $npsn],
                         [
-                            'NamaSekolah'        => $namaSekolah,
-                            'BentukPendidikan'   => $bentukPendidikan,
-                            'Status'             => $status,
-                            'LastSync'           => $lastSync,
-                            'JmlSync'            => $jmlSync,
-                            'KecamatanID'        => $kecamatan->KecamatanID,
+                            'nama_sekolah'       => $namaSekolah,
+                            'bentuk_pendidikan'  => $bentukPendidikan,
+                            'status'             => $status,
+                            'last_sync'          => $lastSync,
+                            'jml_sync'           => $jmlSync,
+                            'kecamatan_id'       => $kecamatan->id,
                         ]
                     );
 
-                    if (!$sekolah || !$sekolah->SekolahID) {
+                    if (!$sekolah || !$sekolah->id) {
                         dump("⚠️ Skipping row {$index}: Failed to create Sekolah '{$namaSekolah}' (NPSN: {$npsn})");
                         continue;
                     }
 
-                    $sekolahTahun = SekolahTahun::firstOrCreate(
-                        ['SekolahID' => $sekolah->SekolahID, 'Tahun' => $tahun],
+                    // Find or create SekolahTahun using tahun_id
+                    $sekolahTahun = SekolahTahun::updateOrCreate(
+                        ['sekolah_id' => $sekolah->id, 'tahun_id' => $tahun->id], // Use tahun_id reference
                         [
-                            'JumlahPesertaDidik' => $jumlahPesertaDidik,
-                            'JumlahGuru'         => $jumlahGuru,
-                            'JumlahPegawai'      => $jumlahPegawai,
-                            'JumlahRombel'       => $jumlahRombel,
+                            'jml_peserta_didik' => $jumlahPesertaDidik,
+                            'jml_guru'         => $jumlahGuru,
+                            'jml_pegawai'      => $jumlahPegawai,
+                            'jml_rombel'       => $jumlahRombel,
                         ]
                     );
 
+                    // Room types mapping
                     $ruanganTypes = [
                         'L' => ['jenis' => 'Kelas'],
                         'M' => ['jenis' => 'Lab'],
@@ -107,21 +123,21 @@ class SekolahSeeder extends Seeder
                         $jumlah = (int) ($row[$column] ?? 0);
                         if ($jumlah > 0) {
                             RuanganTahun::create([
-                                'SekolahTahunID' => $sekolahTahun->SekolahTahunID,
-                                'JenisRuangan'    => $data['jenis'],
-                                'Jumlah'         => $jumlah,
+                                'sekolah_tahun_id' => $sekolahTahun->id,
+                                'jenis_ruangan'    => $data['jenis'],
+                                'jumlah'          => $jumlah,
                             ]);
                         }
                     }
                 } catch (\Exception $e) {
                     dump("❌ Error in row {$index}: {$e->getMessage()}");
-                    $hasError = true; // Set error flag
+                    $hasError = true;
                     continue;
                 }
             }
         } catch (\Exception $e) {
             dump("❌ Seeder failed: " . $e->getMessage());
-            $hasError = true; // Set error flag
+            $hasError = true;
         } finally {
             if (!$hasError) {
                 dump("✅ Seeding completed successfully!");

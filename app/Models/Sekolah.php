@@ -10,24 +10,24 @@ class Sekolah extends Model
     use HasFactory;
     protected $table = 'sekolah'; // Custom table name
 
-    protected $primaryKey = 'SekolahID';
+    protected $primaryKey = 'id';
     protected $fillable = [
-        'NamaSekolah',
-        'NPSN',
-        'BentukPendidikan',
-        'Status',
-        'LastSync',
-        'JmlSync',
-        'KecamatanID'
+        'nama_sekolah',
+        'npsn',
+        'bentuk_pendidikan',
+        'status',
+        'last_sync',
+        'jml_sync',
+        'kecamatan_id'
     ];
 
     public function kecamatan()
     {
-        return $this->belongsTo(Kecamatan::class, 'KecamatanID');
+        return $this->belongsTo(Kecamatan::class, 'kecamatan_id');
     }
 
     public function sekolahTahun()
     {
-        return $this->hasMany(SekolahTahun::class, 'SekolahID');
+        return $this->hasMany(SekolahTahun::class, 'sekolah_id');
     }
 }

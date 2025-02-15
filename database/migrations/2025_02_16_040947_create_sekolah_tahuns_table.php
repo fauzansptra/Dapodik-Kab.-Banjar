@@ -8,13 +8,13 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('sekolah_tahun', function (Blueprint $table) {
-            $table->id('SekolahTahunID');
-            $table->foreignId('SekolahID')->constrained('sekolah', 'SekolahID')->onDelete('cascade');
-            $table->year('Tahun');
-            $table->integer('JumlahPesertaDidik')->default(0);
-            $table->integer('JumlahGuru')->default(0);
-            $table->integer('JumlahPegawai')->default(0);
-            $table->integer('JumlahRombel')->default(0);
+            $table->id('id');
+            $table->foreignId('sekolah_id')->constrained('sekolah')->onDelete('cascade');
+            $table->foreignId('tahun_id')->constrained('tahun')->onDelete('cascade'); // Updated
+            $table->integer('jml_peserta_didik')->default(0);
+            $table->integer('jml_guru')->default(0);
+            $table->integer('jml_pegawai')->default(0);
+            $table->integer('jml_rombel')->default(0);
             $table->timestamps();
         });
     }
