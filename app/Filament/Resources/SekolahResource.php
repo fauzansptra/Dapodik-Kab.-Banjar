@@ -8,6 +8,7 @@ use App\Models\Sekolah;
 use App\Models\Kecamatan;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -19,6 +20,10 @@ use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\MultiSelectFilter;
 use App\Filament\Resources\SekolahResource\Widgets\SekolahStatsWidget;
+use App\Filament\Resources\SekolahResource\RelationManagers\SekolahTahunRelationManager;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components;
 
 
 class SekolahResource extends Resource
@@ -31,9 +36,66 @@ class SekolahResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('NamaSekolah')->required(),
+                TextInput::make('NPSN')->required()->label('NPSN'),
+                Forms\Components\Select::make('bentuk_pendidikan')
+                ->options([
+                    'TK' => 'TK',
+                    'KB' => 'KB',
+                    'TPA' => 'TPA',
+                    'SMK' => 'SMK',
+                    'PKBM' => 'PKBM',
+                    'SLB' => 'SLB',
+                    'SKB' => 'SKB',
+                    'SD' => 'SD',
+                    'SMP' => 'SMP',
+                    'SMA' => 'SMA',
+                ])
+                ->searchable()
+                ->required(),
+            
+            Forms\Components\Select::make('status')
+                ->options([
+                    'Negeri' => 'Negeri',
+                    'Swasta' => 'Swasta',
+                ])
+                ->required(),
+            
+            Forms\Components\Select::make('kecamatan_id')
+                ->label('Kecamatan')
+                ->relationship('kecamatan', 'NamaKecamatan')
+                ->searchable()
+                ->required(),
+            
             ]);
     }
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Components\Section::make()
+                    ->schema([
+                        Components\Split::make([
+                            Components\Grid::make(2)
+                                ->schema([
+                                    Components\Group::make([
+                                        Components\TextEntry::make('NamaSekolah'),
+                                        Components\TextEntry::make('NPSN'),
+                                        Components\TextEntry::make('BentukPendidikan')
+                                            ->badge()
+                                            ->color('success'),
+                                    ]),
+                                    Components\Group::make([
+                                        Components\TextEntry::make('Status'),
+                                        Components\TextEntry::make('Kecamatan.NamaKecamatan')
+                                    ]),
+                                ]),
+                        ])->from('lg'),
+                    ]),
+            ]);
+    }
+
+    
 
     public static function table(Table $table): Table
     {
@@ -107,7 +169,7 @@ class SekolahResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            SekolahTahunRelationManager::class,
         ];
     }
     public static function getWidgets(): array
