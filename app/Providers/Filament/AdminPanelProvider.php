@@ -24,7 +24,7 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->id('admin')   
+            ->id('admin')
             ->path('/')
             ->login()
             ->colors([
@@ -39,6 +39,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
+                \App\Filament\Resources\SekolahResource\Widgets\SekolahStatsWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -54,6 +55,5 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ]);
-            
     }
 }
