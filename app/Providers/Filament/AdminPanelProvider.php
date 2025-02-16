@@ -27,6 +27,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')   
             ->path('/')
             ->login()
+            ->brandName('DAPODIK')
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -54,6 +55,7 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ]);
+            
             
     }
 }
