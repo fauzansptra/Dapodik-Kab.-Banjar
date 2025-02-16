@@ -26,11 +26,6 @@ class SekolahTahun extends Model
         return $this->belongsTo(Sekolah::class, 'sekolah_id');
     }
 
-    public function ruangan()
-    {
-        return $this->hasMany(RuanganTahun::class, 'sekolah_tahun_id');
-    }
-
     public function tahun()
     {
         return $this->belongsTo(Tahun::class, 'tahun_id');

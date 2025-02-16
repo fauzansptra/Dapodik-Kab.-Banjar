@@ -9,7 +9,8 @@ return new class extends Migration {
     {
         Schema::create('ruangan_tahun', function (Blueprint $table) {
             $table->id('id');
-            $table->foreignId('sekolah_tahun_id')->constrained('sekolah_tahun')->onDelete('cascade');
+            $table->foreignId('sekolah_id')->constrained('sekolah')->onDelete('cascade');
+            $table->foreignId('tahun_id')->constrained('tahun')->onDelete('cascade');
             $table->enum('jenis_ruangan', ['kelas', 'lab', 'perpustakaan']);
             $table->integer('jumlah')->default(0);
             $table->timestamps();
