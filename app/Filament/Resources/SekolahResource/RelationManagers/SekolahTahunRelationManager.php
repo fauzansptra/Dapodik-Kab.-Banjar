@@ -31,25 +31,39 @@ class SekolahTahunRelationManager extends RelationManager
                 Forms\Components\Select::make('tahun_id')
                     ->label('Tahun')
                     ->relationship('tahun', 'tahun')
+                    ->validationMessages([
+                        'required' => 'Tahun wajib diisi',
+                    ])
                     ->preload()
                     ->required(),
                 Forms\Components\TextInput::make('jml_peserta_didik')
                     ->label('Peserta Didik')
+                    ->validationMessages([
+                        'required' => 'Peserta Didik wajib diisi',
+                    ])
                     ->numeric()
                     ->required(),
 
                 Forms\Components\TextInput::make('jml_guru')
                     ->label('Guru')
+                    ->validationMessages([
+                        'required' => 'Guru wajib diisi',
+                    ])
                     ->numeric()
                     ->required(),
 
                 Forms\Components\TextInput::make('jml_pegawai')
                     ->label('Pegawai')
+                    ->validationMessages([
+                        'required' => 'Pegawai wajib diisi',])
                     ->numeric()
                     ->required(),
 
                 Forms\Components\TextInput::make('jml_rombel')
                     ->label('Rombel')
+                    ->validationMessages([
+                        'required' => 'Rombel wajib diisi',
+                    ])  
                     ->numeric()
                     ->required(),
 

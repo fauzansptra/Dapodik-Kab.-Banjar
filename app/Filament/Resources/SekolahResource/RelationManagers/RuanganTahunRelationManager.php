@@ -26,6 +26,9 @@ class RuanganTahunRelationManager extends RelationManager
                 Forms\Components\Select::make('tahun_id')
                     ->label('Tahun')
                     ->relationship('tahun', 'tahun')
+                    ->validationMessages([
+                        'required' => 'Tahun wajib diisi',
+                    ])
                     ->required(),
 
                 Forms\Components\Select::make('jenis_ruangan')
@@ -35,10 +38,16 @@ class RuanganTahunRelationManager extends RelationManager
                         'perpustakaan' => 'Perpustakaan',
 
                     ])
+                    ->validationMessages([
+                        'required' => 'Jenis Ruangan wajib diisi',
+                    ])
                     ->label('Jenis Ruangan')
                     ->required(),
                 Forms\Components\TextInput::make('jumlah')
                     ->label('Jumlah')
+                    ->validationMessages([
+                        'required' => 'Jumlah wajib diisi',
+                    ])
                     ->numeric()
                     ->required(),
             ]);

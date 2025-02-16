@@ -40,10 +40,18 @@ class SekolahResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('nama_sekolah')->required(),
+                TextInput::make('nama_sekolah')
+                ->required()
+                ->validationMessages([
+                    'required' => 'Nama Sekolah tidak boleh kosong.',
+                ]),
                 TextInput::make('npsn')
                     ->required()
                     ->label('NPSN')
+                    ->validationMessages([
+                        'unique' => 'NPSN sudah terdaftar.',
+                        'required' => 'NPSN tidak boleh kosong.',
+                    ])
                     ->unique(ignoreRecord: true),
                 Forms\Components\Select::make('bentuk_pendidikan')
                     ->options([
@@ -58,6 +66,9 @@ class SekolahResource extends Resource
                         'SMP' => 'SMP',
                         'SMA' => 'SMA',
                     ])
+                    ->validationMessages([
+                        'required' => 'Bentuk Pendidikan tidak boleh kosong.',
+                    ])
                     ->searchable()
                     ->required(),
 
@@ -66,11 +77,17 @@ class SekolahResource extends Resource
                         'Negeri' => 'Negeri',
                         'Swasta' => 'Swasta',
                     ])
+                    ->validationMessages([
+                        'required' => 'Status tidak boleh kosong.',
+                    ])
                     ->required(),
 
                 Forms\Components\Select::make('kecamatan_id')
                     ->label('Kecamatan')
                     ->relationship('kecamatan', 'nama_kecamatan')
+                    ->validationMessages([
+                        'required' => 'Kecamatan tidak boleh kosong.',
+                    ])
                     ->searchable()
                     ->preload()
                     ->required(),
@@ -94,9 +111,10 @@ class SekolahResource extends Resource
                                             ->color(function (string $state): string {
                                                 return match (true) {
                                                     in_array($state, ['TPA', 'KB', 'TK']) => 'success', // PAUD
-                                                    in_array($state, ['SD', 'SLB']) => 'danger', // Pendidikan Dasar
-                                                    in_array($state, ['SMP', 'SMA', 'SMK']) => 'info', // Pendidikan Menengah
-                                                    in_array($state, ['PKBM', 'SKB']) => 'primary', // Nonformal/Kesetaraan
+                                                    in_array($state, ['SD']) => 'danger', // Pendidikan Dasar
+                                                    in_array($state, ['SMP']) => 'info', // Pendidikan Menengah
+                                                    in_array($state, ['SMA', 'SMK']) => 'gray', // Pendidikan Menengah
+                                                    in_array($state, ['PKBM', 'SKB', 'SLB']) => 'primary', // Nonformal/Kesetaraan
                                                     default => 'gray',
                                                 };
                                             }),
@@ -136,10 +154,27 @@ class SekolahResource extends Resource
                     ->searchable(),
                 TextColumn::make('bentuk_pendidikan')
                     ->label('Bentuk Pendidikan')
+                    ->badge()
+                    ->color(function (string $state): string {
+                        return match (true) {
+                            in_array($state, ['TPA', 'KB', 'TK']) => 'success', // PAUD
+                            in_array($state, ['SD']) => 'danger', // Pendidikan Dasar
+                            in_array($state, ['SMP']) => 'info', // Pendidikan Menengah
+                            in_array($state, ['SMA', 'SMK']) => 'gray', // Pendidikan Menengah
+                            in_array($state, ['PKBM', 'SKB', 'SLB']) => 'primary', // Nonformal/Kesetaraan
+                            default => 'gray',
+                        };
+                    })
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('status')
                     ->label('Status')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'Negeri' => 'info',
+                        'Swasta' => 'danger',
+                        default => 'gray',
+                    })
                     ->sortable(),
                 TextColumn::make('kecamatan.nama_kecamatan')
                     ->label('Kecamatan')
@@ -183,9 +218,9 @@ class SekolahResource extends Resource
                 Tables\Actions\DeleteAction::make()->label('Hapus'),
             ])
             ->bulkActions([
-                // Tables\Actions\BulkActionGroup::make([
-                //     Tables\Actions\DeleteBulkAction::make(),
-                // ]),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
     // public static function getRecordSubNavigation(Page $page): array
