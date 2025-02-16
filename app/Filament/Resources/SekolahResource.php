@@ -26,6 +26,8 @@ use App\Models\RuanganTahun;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
 use Filament\Infolists\Components;
+use Filament\Pages\SubNavigationPosition;
+use Filament\Resources\Pages\Page;
 
 
 class SekolahResource extends Resource
@@ -39,7 +41,10 @@ class SekolahResource extends Resource
         return $form
             ->schema([
                 TextInput::make('nama_sekolah')->required(),
-                TextInput::make('npsn')->required()->label('NPSN'),
+                TextInput::make('npsn')
+                    ->required()
+                    ->label('NPSN')
+                    ->unique(ignoreRecord: true),
                 Forms\Components\Select::make('bentuk_pendidikan')
                     ->options([
                         'TK' => 'TK',
@@ -67,6 +72,7 @@ class SekolahResource extends Resource
                     ->label('Kecamatan')
                     ->relationship('kecamatan', 'nama_kecamatan')
                     ->searchable()
+                    ->preload()
                     ->required(),
 
             ]);
@@ -84,17 +90,17 @@ class SekolahResource extends Resource
                                         Components\TextEntry::make('nama_sekolah'),
                                         Components\TextEntry::make('npsn')->label('NPSN'),
                                         Components\TextEntry::make('bentuk_pendidikan')
-                                        ->badge()
-                                        ->color(function (string $state): string {
-                                            return match (true) {
-                                                in_array($state, ['TPA', 'KB', 'TK']) => 'success', // PAUD
-                                                in_array($state, ['SD', 'SLB']) => 'danger', // Pendidikan Dasar
-                                                in_array($state, ['SMP', 'SMA', 'SMK']) => 'info', // Pendidikan Menengah
-                                                in_array($state, ['PKBM', 'SKB']) => 'primary', // Nonformal/Kesetaraan
-                                                default => 'gray',
-                                            };
-                                        }),
-                                    
+                                            ->badge()
+                                            ->color(function (string $state): string {
+                                                return match (true) {
+                                                    in_array($state, ['TPA', 'KB', 'TK']) => 'success', // PAUD
+                                                    in_array($state, ['SD', 'SLB']) => 'danger', // Pendidikan Dasar
+                                                    in_array($state, ['SMP', 'SMA', 'SMK']) => 'info', // Pendidikan Menengah
+                                                    in_array($state, ['PKBM', 'SKB']) => 'primary', // Nonformal/Kesetaraan
+                                                    default => 'gray',
+                                                };
+                                            }),
+
                                     ]),
                                     Components\Group::make([
                                         Components\TextEntry::make('status')
@@ -182,6 +188,13 @@ class SekolahResource extends Resource
                 // ]),
             ]);
     }
+    // public static function getRecordSubNavigation(Page $page): array
+    // {
+    //     return $page->generateNavigationItems([
+    //         Pages\ViewSekolah::class,
+    //         Pages\EditSekolah::class,
+    //     ]);
+    // }
 
     public static function getRelations(): array
     {

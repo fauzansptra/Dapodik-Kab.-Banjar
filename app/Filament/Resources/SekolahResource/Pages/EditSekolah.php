@@ -14,6 +14,9 @@ class EditSekolah extends EditRecord
     {
         return [
             Actions\DeleteAction::make(),
+            Actions\Action::make('view')
+                ->label('Detail Sekolah')
+                ->url(fn () => static::getResource()::getUrl('view', ['record' => $this->record])),
         ];
     }
 }
