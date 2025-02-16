@@ -30,4 +30,8 @@ class Sekolah extends Model
     {
         return $this->hasMany(SekolahTahun::class, 'sekolah_id');
     }
+    public function ruanganTahun()
+    {
+        return $this->hasMany(RuanganTahun::class, 'sekolah_id');
+    }
 }

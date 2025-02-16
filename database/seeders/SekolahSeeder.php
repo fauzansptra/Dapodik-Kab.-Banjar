@@ -123,7 +123,8 @@ class SekolahSeeder extends Seeder
                         $jumlah = (int) ($row[$column] ?? 0);
                         if ($jumlah > 0) {
                             RuanganTahun::create([
-                                'sekolah_tahun_id' => $sekolahTahun->id,
+                                'sekolah_id' => $sekolah->id,
+                                'tahun_id' => $tahun->id,
                                 'jenis_ruangan'    => $data['jenis'],
                                 'jumlah'          => $jumlah,
                             ]);

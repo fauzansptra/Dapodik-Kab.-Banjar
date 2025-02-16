@@ -61,21 +61,7 @@ class SekolahTahunRelationManager extends RelationManager
                 TextColumn::make('jml_guru')->label('Guru'),
                 TextColumn::make('jml_pegawai')->label('Pegawai'),
                 TextColumn::make('jml_rombel')->label('Rombel'),
-                TextColumn::make('jumlah_kelas')->label('Kelas')->default('0'),
-                TextColumn::make('jumlah_lab')->label('Laboratorium')->default('0'),
-                TextColumn::make('jumlah_perpustakaan')->label('Perpustakaan')->default('0'),
             ])
-            ->modifyQueryUsing(function (Builder $query) {
-                $query->withSum(['ruangan as jumlah_kelas' => function ($query) {
-                    $query->where('jenis_ruangan', 'kelas');
-                }], 'jumlah')
-                    ->withSum(['ruangan as jumlah_lab' => function ($query) {
-                        $query->where('jenis_ruangan', 'lab');
-                    }], 'jumlah')
-                    ->withSum(['ruangan as jumlah_perpustakaan' => function ($query) {
-                        $query->where('jenis_ruangan', 'perpustakaan');
-                    }], 'jumlah');
-            })
             ->filters([
                 //
             ])
