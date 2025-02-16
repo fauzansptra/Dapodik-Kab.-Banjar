@@ -4,6 +4,7 @@ namespace App\Filament\Resources\SekolahResource\Pages;
 
 use App\Filament\Resources\SekolahResource;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Actions\Action;
 
 class ViewSekolah extends ViewRecord
 {
@@ -15,4 +16,13 @@ class ViewSekolah extends ViewRecord
             SekolahResource\RelationManagers\SekolahTahunRelationManager::class,
         ];
     }
+    protected function getHeaderActions(): array
+{
+    return [
+        Action::make('edit')
+            ->label('Edit Sekolah')
+            ->url(fn () => static::getResource()::getUrl('edit', ['record' => $this->record])),
+    ];
+}
+
 }

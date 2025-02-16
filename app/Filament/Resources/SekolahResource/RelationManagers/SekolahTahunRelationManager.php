@@ -16,6 +16,7 @@ use Illuminate\Support\Str;
 class SekolahTahunRelationManager extends RelationManager
 {
     protected static string $relationship = 'SekolahTahun';
+    protected static ?string $title = 'Data Orang'; // GANTI JUDUL DI TAB
     public function isReadOnly(): bool
     {
         // return false;
@@ -27,6 +28,11 @@ class SekolahTahunRelationManager extends RelationManager
     {
         return $form
             ->schema([
+                Forms\Components\Select::make('tahun_id')
+                    ->label('Tahun')
+                    ->relationship('tahun', 'tahun')
+                    ->preload()
+                    ->required(),
                 Forms\Components\TextInput::make('jml_peserta_didik')
                     ->label('Peserta Didik')
                     ->numeric()

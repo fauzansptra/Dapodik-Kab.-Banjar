@@ -9,25 +9,33 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Database\Eloquent\SoftDeletingScope;;
 
 class RuanganTahunRelationManager extends RelationManager
 {
-    protected static string $relationship = 'RuanganTahun';
+    protected static string $relationship = 'ruanganTahun';
+    protected static ?string $title = 'Data Ruangan'; // GANTI JUDUL DI TAB
+    // protected static ?string $label = 'Ruangan Custom'; // GANTI LABEL SATUAN
+    // protected static ?string $pluralLabel = 'Ruangan Custom'; // GANTI LABEL JAMAK
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
 
+                Forms\Components\Select::make('tahun_id')
+                    ->label('Tahun')
+                    ->relationship('tahun', 'tahun')
+                    ->required(),
 
-                Forms\Components\Select::make('bentuk_pendidikan')
+                Forms\Components\Select::make('jenis_ruangan')
                     ->options([
                         'kelas' => 'Kelas',
                         'lab' => 'Laboratorium',
                         'perpustakaan' => 'Perpustakaan',
 
                     ])
+                    ->label('Jenis Ruangan')
                     ->required(),
                 Forms\Components\TextInput::make('jumlah')
                     ->label('Jumlah')
@@ -55,8 +63,15 @@ class RuanganTahunRelationManager extends RelationManager
         // ->bulkActions([]);
     }
 
+    public function getHeaderWidgets(): array
+    {
+        return [
+            \App\Filament\Resources\SekolahResource\Widgets\RuanganTahunStats::class,
+        ];
+    }
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->with(['sekolah', 'tahun']);
     }
+    
 }
