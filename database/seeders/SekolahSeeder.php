@@ -5,9 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Sekolah;
 use App\Models\Kecamatan;
-use App\Models\RuanganTahun;
 use App\Models\SekolahTahun;
-use App\Models\Tahun; // Ensure Tahun model is imported
+use App\Models\Tahun;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -44,6 +43,9 @@ class SekolahSeeder extends Seeder
                     $jumlahRombel = (int) ($row['I'] ?? 0);
                     $jumlahGuru = (int) ($row['J'] ?? 0);
                     $jumlahPegawai = (int) ($row['K'] ?? 0);
+                    $jumlahKelas = (int) ($row['L'] ?? 0); // New column
+                    $jumlahLab = (int) ($row['M'] ?? 0); // New column
+                    $jumlahPerpustakaan = (int) ($row['N'] ?? 0); // New column
                     $tahunValue = (int) ($row['O'] ?? 0);
                     $namaKecamatan = trim($row['P'] ?? '');
 
@@ -101,35 +103,19 @@ class SekolahSeeder extends Seeder
                         continue;
                     }
 
-                    // Find or create SekolahTahun using tahun_id
-                    $sekolahTahun = SekolahTahun::updateOrCreate(
-                        ['sekolah_id' => $sekolah->id, 'tahun_id' => $tahun->id], // Use tahun_id reference
+                    // Update SekolahTahun with new fields
+                    SekolahTahun::updateOrCreate(
+                        ['sekolah_id' => $sekolah->id, 'tahun_id' => $tahun->id],
                         [
-                            'jml_peserta_didik' => $jumlahPesertaDidik,
-                            'jml_guru'         => $jumlahGuru,
-                            'jml_pegawai'      => $jumlahPegawai,
-                            'jml_rombel'       => $jumlahRombel,
+                            'jml_peserta_didik'  => $jumlahPesertaDidik,
+                            'jml_guru'           => $jumlahGuru,
+                            'jml_pegawai'        => $jumlahPegawai,
+                            'jml_rombel'         => $jumlahRombel,
+                            'jml_kelas'          => $jumlahKelas,  // Added
+                            'jml_lab'            => $jumlahLab,  // Added
+                            'jml_perpustakaan'   => $jumlahPerpustakaan,  // Added
                         ]
                     );
-
-                    // Room types mapping
-                    $ruanganTypes = [
-                        'L' => ['jenis' => 'Kelas'],
-                        'M' => ['jenis' => 'Lab'],
-                        'N' => ['jenis' => 'Perpustakaan']
-                    ];
-
-                    foreach ($ruanganTypes as $column => $data) {
-                        $jumlah = (int) ($row[$column] ?? 0);
-                        if ($jumlah > 0) {
-                            RuanganTahun::create([
-                                'sekolah_id' => $sekolah->id,
-                                'tahun_id' => $tahun->id,
-                                'jenis_ruangan'    => $data['jenis'],
-                                'jumlah'          => $jumlah,
-                            ]);
-                        }
-                    }
                 } catch (\Exception $e) {
                     dump("❌ Error in row {$index}: {$e->getMessage()}");
                     $hasError = true;
