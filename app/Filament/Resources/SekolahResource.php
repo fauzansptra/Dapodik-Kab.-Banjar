@@ -21,8 +21,6 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\MultiSelectFilter;
 use App\Filament\Resources\SekolahResource\Widgets\SekolahStatsWidget;
 use App\Filament\Resources\SekolahResource\RelationManagers\SekolahTahunRelationManager;
-use App\Filament\Resources\SekolahResource\RelationManagers\RuanganTahunRelationManager;
-use App\Models\RuanganTahun;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
 use Filament\Infolists\Components;
@@ -235,7 +233,6 @@ class SekolahResource extends Resource
     {
         return [
             SekolahTahunRelationManager::class,
-            RuanganTahunRelationManager::class,
         ];
     }
     public static function getWidgets(): array

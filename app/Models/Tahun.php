@@ -18,9 +18,5 @@ class Tahun extends Model
     {
         return $this->hasMany(SekolahTahun::class, 'tahun_id');
     }
-    public function ruanganTahun()
-    {
-        return $this->hasMany(RuanganTahun::class, 'tahun_id');
-    }
     
 }

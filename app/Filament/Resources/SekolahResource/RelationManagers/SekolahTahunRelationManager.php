@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
 
+use function Laravel\Prompts\text;
 
 class SekolahTahunRelationManager extends RelationManager
 {
@@ -81,6 +82,9 @@ class SekolahTahunRelationManager extends RelationManager
                 TextColumn::make('jml_guru')->label('Guru'),
                 TextColumn::make('jml_pegawai')->label('Pegawai'),
                 TextColumn::make('jml_rombel')->label('Rombel'),
+                textColumn::make('jml_kelas')->label('Kelas'),
+                textColumn::make('jml_lab')->label('Lab'),
+                textColumn::make('jml_perpustakaan')->label('Perpustakaan'),
             ])
             ->filters([
                 //
