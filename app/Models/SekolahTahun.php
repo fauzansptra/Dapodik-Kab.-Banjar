@@ -14,11 +14,14 @@ class SekolahTahun extends Model
 
     protected $fillable = [
         'sekolah_id',
-        'tahun_id', // Updated
+        'tahun_id',
         'jml_peserta_didik',
         'jml_guru',
         'jml_pegawai',
-        'jml_rombel'
+        'jml_rombel',
+        'jml_kelas',         // Added
+        'jml_lab',           // Added
+        'jml_perpustakaan'   // Added
     ];
 
     public function sekolah()
@@ -30,5 +33,4 @@ class SekolahTahun extends Model
     {
         return $this->belongsTo(Tahun::class, 'tahun_id');
     }
-    
 }
