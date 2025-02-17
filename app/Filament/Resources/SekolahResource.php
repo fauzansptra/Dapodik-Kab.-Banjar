@@ -19,7 +19,7 @@ use function Termwind\style;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\MultiSelectFilter;
-use App\Filament\Resources\SekolahResource\Widgets\SekolahStatsWidget;
+// use App\Filament\Resources\SekolahResource\Widgets\SekolahStatsWidget;
 use App\Filament\Resources\SekolahResource\RelationManagers\SekolahTahunRelationManager;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
@@ -32,7 +32,7 @@ class SekolahResource extends Resource
 {
     protected static ?string $model = Sekolah::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
     protected static ?string $navigationGroup = 'Data Utama';
 
     public static function form(Form $form): Form
@@ -239,7 +239,7 @@ class SekolahResource extends Resource
     public static function getWidgets(): array
     {
         return [
-            SekolahStatsWidget::class,
+            // SekolahStatsWidget::class,
         ];
     }
 
