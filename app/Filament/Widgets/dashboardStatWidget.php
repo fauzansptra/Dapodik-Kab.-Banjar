@@ -13,11 +13,11 @@ class dashboardStatWidget extends BaseWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('Jumlah Sekolah', Sekolah::count())
-                ->color('primary'),
-            stat::make('Jumlah Tahun', Tahun::count())
-                ->color('primary'),
-            stat::make('Jumlah Kecamatan', Kecamatan::count())
+            // Stat::make('Jumlah Sekolah', Sekolah::count())
+            //     ->color('primary'),
+            // stat::make('Jumlah Tahun', Tahun::count())
+            //     ->color('primary'),
+            // stat::make('Jumlah Kecamatan', Kecamatan::count())
         ];
     }
 }

@@ -8,6 +8,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Pages\Dashboard as BaseDashboard;
+use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class Dashboard extends BaseDashboard
 {
@@ -19,27 +20,31 @@ class Dashboard extends BaseDashboard
             ->schema([
                 Section::make()
                     ->schema([
-                        Select::make('businessCustomersOnly')
-                            ->boolean(),
-                        DatePicker::make('startDate')
-                            ->maxDate(fn(Get $get) => $get('endDate') ?: now()),
-                        DatePicker::make('endDate')
-                            ->minDate(fn(Get $get) => $get('startDate') ?: now())
-                            ->maxDate(now()),
+                        Select::make('tahun_id')
+                            ->label('Tahun')
+                            ->options(function () {
+                                return \App\Models\Tahun::query()
+                                    ->pluck('tahun', 'id');
+                            })
+                            ->searchable()
+                            ->preload(),
                     ])
                     ->columns(3),
             ]);
     }
 
-    public function widgets(): array
-    {
-        return [
-            \App\Filament\Widgets\dashboardStatWidget::class,
+    // public function widgets(): array
+    // {
+    //     return [
+    //         \App\Filament\Widgets\dashboardStatWidget::class,
 
-        ];
-    }
+    //     ];
+    // }
     protected function getHeaderWidgets(): array
     {
-        return $this->widgets();
+        return [
+            // \App\Filament\Widgets\dashboardStatWidget::class,
+            \App\Filament\Resources\SekolahResource\Widgets\DashboardWidget::class,
+        ];
     }
 }
