@@ -33,6 +33,7 @@ class SekolahResource extends Resource
     protected static ?string $model = Sekolah::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Data Utama';
 
     public static function form(Form $form): Form
     {
