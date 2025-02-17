@@ -17,7 +17,7 @@ use function Laravel\Prompts\text;
 class SekolahTahunRelationManager extends RelationManager
 {
     protected static string $relationship = 'SekolahTahun';
-    protected static ?string $title = 'Data Orang'; // GANTI JUDUL DI TAB
+    protected static ?string $title = 'Detail Sekolah Per Tahun'; // GANTI JUDUL DI TAB
     public function isReadOnly(): bool
     {
         // return false;
