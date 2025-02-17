@@ -209,7 +209,9 @@ class SekolahResource extends Resource
                     ->options(fn() => Kecamatan::pluck('nama', 'id')->toArray())
                     ->label('Kecamatan')
                     ->placeholder('Semua')
-                    ->relationship('kecamatan', 'nama_kecamatan'),
+                    ->relationship('kecamatan', 'nama_kecamatan')
+                    ->preload()
+                    ->multiple(),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()->label('Detail'),
