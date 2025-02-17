@@ -20,10 +20,16 @@ class SekolahStatsWidget extends BaseWidget
     }
     protected function getStats(): array
     {
-        $query=$this->getPageTableQuery();
+        $all=$this->getPageTableQuery();
+        $negeri=$this->getPageTableQuery()->where('status','Negeri');
+        $swasta=$this->getPageTableQuery()->where('status','Swasta');
         // $pesertaDidik=$query->sum('sekolah_tahun.jml_peserta_didik');
         return [
-            Stat::make('Jumlah Sekolah', $query->count())
+            Stat::make('Total Sekolah', $all->count())
+            ->color('primary'),
+            Stat::make('Sekolah Negeri', $negeri->count())
+            ->color('primary'),
+            Stat::make('Sekolah Swasta', $swasta->count())
             ->color('primary'),
             // Stat::make('Jumlah Peserta Didik', $pesertaDidik)
             // ->color('primary'),
