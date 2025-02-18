@@ -9,13 +9,18 @@ use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Carbon\Carbon;
 
 class Dashboard extends BaseDashboard
 {
     use BaseDashboard\Concerns\HasFiltersForm;
+    protected static ?string $title = 'Beranda';
+
 
     public function filtersForm(Form $form): Form
     {
+    $tahun=Carbon::now()->year;
+    $tahun_id=\App\Models\Tahun::where('tahun',$tahun)->first()->id;
         return $form
             ->schema([
                 Section::make()
@@ -26,10 +31,12 @@ class Dashboard extends BaseDashboard
                                 return \App\Models\Tahun::query()
                                     ->pluck('tahun', 'id');
                             })
+                            ->default($tahun_id)
                             ->searchable()
-                            ->preload(),
+                            ->preload()
+                            ->columnSpan(4),
                     ])
-                    ->columns(3),
+                    ->columns(4),
             ]);
     }
 

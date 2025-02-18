@@ -15,6 +15,7 @@ use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Validation\Rules\Unique;
 
 class TahunResource extends Resource
 {
@@ -30,7 +31,11 @@ class TahunResource extends Resource
             ->schema([
                 TextInput::make('tahun')
                     ->label('Tahun')
-                    ->required(),
+                    ->required()
+                    ->validationMessages([
+                        'unique' => 'Tahun sudah ada',
+                    ])
+                    ->Unique(),
             ]);
     }
 
