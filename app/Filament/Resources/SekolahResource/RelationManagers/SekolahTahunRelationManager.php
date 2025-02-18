@@ -68,6 +68,29 @@ class SekolahTahunRelationManager extends RelationManager
                     ->numeric()
                     ->required(),
 
+                Forms\Components\TextInput::make('jml_kelas')
+                ->label('Kelas')
+                    ->validationMessages([
+                        'required' => 'Kelas wajib diisi',
+                    ])
+                    ->numeric()
+                    ->required(),
+                
+                    Forms\Components\TextInput::make('jml_lab')
+                    ->label('Lab')
+                    ->validationMessages([
+                        'required' => 'Lab wajib diisi',
+                    ])
+                    ->numeric()
+                    ->required(),
+
+                Forms\Components\TextInput::make('jml_perpustakaan')
+                    ->label('Perpustakaan')
+                    ->validationMessages([
+                        'required' => 'Perpustakaan wajib diisi',
+                    ])
+                    ->numeric()
+                    ->required(),
             ]);
     }
 

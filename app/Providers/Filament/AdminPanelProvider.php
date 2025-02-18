@@ -27,7 +27,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('')
             ->login()
-            ->brandName('DAPODIK')
+            ->brandName('DAPODIK Kabupaten Banjar')
             ->colors([
                 'primary' => Color::Amber,
             ])
