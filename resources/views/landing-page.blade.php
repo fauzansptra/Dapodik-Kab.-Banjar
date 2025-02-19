@@ -1,1 +1,4 @@
 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Esse nisi repellat reprehenderit illo suscipit quisquam iure ad repudiandae in quas quia, nesciunt vero at voluptatibus a adipisci eum doloremque quod cum nihil accusamus pariatur. Quasi saepe doloribus ipsa odit facilis! Corrupti explicabo veniam architecto! Blanditiis deserunt neque assumenda recusandae culpa aperiam, ullam asperiores, dolore, porro quae sit autem? Officia assumenda ullam obcaecati rem excepturi alias, temporibus laborum consequuntur repudiandae, nemo, tempora inventore sint libero. Distinctio consectetur facere praesentium quasi perferendis dolore dicta enim alias error eos aperiam illo, ipsum, laboriosam, saepe modi. Dolores exercitationem dolorem quis repellendus? Illo, laudantium delectus.
+
+
+<x-footer />
