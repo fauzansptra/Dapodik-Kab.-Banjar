@@ -16,13 +16,13 @@ class ViewSekolah extends ViewRecord
             SekolahResource\RelationManagers\SekolahTahunRelationManager::class,
         ];
     }
-    protected function getHeaderActions(): array
-{
-    return [
-        Action::make('edit')
-            ->label('Edit Sekolah')
-            ->url(fn () => static::getResource()::getUrl('edit', ['record' => $this->record])),
-    ];
-}
+//     protected function getHeaderActions(): array
+// {
+//     return [
+//         Action::make('edit')
+//             ->label('Edit Sekolah')
+//             ->url(fn () => static::getResource()::getUrl('edit', ['record' => $this->record])),
+//     ];
+// }
 
 }

@@ -35,10 +35,14 @@ class SekolahResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
     protected static ?string $navigationGroup = 'Data Utama';
 
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
+                Forms\Components\Section::make()
+                ->schema([
                 TextInput::make('nama_sekolah')
                 ->required()
                 ->validationMessages([
@@ -90,7 +94,7 @@ class SekolahResource extends Resource
                     ->searchable()
                     ->preload()
                     ->required(),
-
+                ])->columns(2),
             ]);
     }
     public static function infolist(Infolist $infolist): Infolist
@@ -224,13 +228,13 @@ class SekolahResource extends Resource
                 ]),
             ]);
     }
-    // public static function getRecordSubNavigation(Page $page): array
-    // {
-    //     return $page->generateNavigationItems([
-    //         Pages\ViewSekolah::class,
-    //         Pages\EditSekolah::class,
-    //     ]);
-    // }
+    public static function getRecordSubNavigation(Page $page): array
+    {
+        return $page->generateNavigationItems([
+            Pages\ViewSekolah::class,
+            Pages\EditSekolah::class,
+        ]);
+    }
 
     public static function getRelations(): array
     {

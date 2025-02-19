@@ -10,13 +10,13 @@ class EditSekolah extends EditRecord
 {
     protected static string $resource = SekolahResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\DeleteAction::make(),
-            Actions\Action::make('view')
-                ->label('Detail Sekolah')
-                ->url(fn () => static::getResource()::getUrl('view', ['record' => $this->record])),
-        ];
-    }
+    // protected function getHeaderActions(): array
+    // {
+    //     return [
+    //         Actions\DeleteAction::make(),
+    //         Actions\Action::make('view')
+    //             ->label('Detail Sekolah')
+    //             ->url(fn () => static::getResource()::getUrl('view', ['record' => $this->record])),
+    //     ];
+    // }
 }
