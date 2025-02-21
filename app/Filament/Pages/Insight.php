@@ -24,4 +24,12 @@ class Insight extends Page
             // Tambahkan widget lain di sini jika diperlukan
         ];
     }
+    public static function shouldRegisterNavigation(): bool
+    {
+        $user = \Illuminate\Support\Facades\Auth::user();
+        if ($user->role === 'admin_sekolah') {
+            return false;
+        }
+        return true;
+    }
 }
