@@ -54,4 +54,12 @@ class Dashboard extends BaseDashboard
             \App\Filament\Resources\SekolahResource\Widgets\DashboardWidget::class,
         ];
     }
+        public static function shouldRegisterNavigation(): bool
+    {
+        $user = \Illuminate\Support\Facades\Auth::user();
+        if ($user->role === 'admin_sekolah') {
+            return false;
+        }
+        return true;
+    }
 }

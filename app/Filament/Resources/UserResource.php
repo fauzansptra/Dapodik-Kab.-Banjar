@@ -70,4 +70,14 @@ class UserResource extends Resource
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
+    
+    // public static function shouldRegisterNavigation(): bool
+    // {
+    //     $user = \Illuminate\Support\Facades\Auth::user();
+    //     if ($user->role !== 'superadmin') {
+    //         return false;
+    //     }
+    //     return static::canAccessClusteredComponents();
+    // }
+    
 }

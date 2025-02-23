@@ -35,6 +35,8 @@ class SekolahResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
     protected static ?string $navigationGroup = 'Data Utama';
 
+    protected static string $title = 'Sekolah';
+
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form
@@ -42,59 +44,59 @@ class SekolahResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Section::make()
-                ->schema([
-                TextInput::make('nama_sekolah')
-                ->required()
-                ->validationMessages([
-                    'required' => 'Nama Sekolah tidak boleh kosong.',
-                ]),
-                TextInput::make('npsn')
-                    ->required()
-                    ->label('NPSN')
-                    ->validationMessages([
-                        'unique' => 'NPSN sudah terdaftar.',
-                        'required' => 'NPSN tidak boleh kosong.',
-                    ])
-                    ->unique(ignoreRecord: true),
-                Forms\Components\Select::make('bentuk_pendidikan')
-                    ->options([
-                        'TK' => 'TK',
-                        'KB' => 'KB',
-                        'TPA' => 'TPA',
-                        'SMK' => 'SMK',
-                        'PKBM' => 'PKBM',
-                        'SLB' => 'SLB',
-                        'SKB' => 'SKB',
-                        'SD' => 'SD',
-                        'SMP' => 'SMP',
-                        'SMA' => 'SMA',
-                    ])
-                    ->validationMessages([
-                        'required' => 'Bentuk Pendidikan tidak boleh kosong.',
-                    ])
-                    ->searchable()
-                    ->required(),
+                    ->schema([
+                        TextInput::make('nama_sekolah')
+                            ->required()
+                            ->validationMessages([
+                                'required' => 'Nama Sekolah tidak boleh kosong.',
+                            ]),
+                        TextInput::make('npsn')
+                            ->required()
+                            ->label('NPSN')
+                            ->validationMessages([
+                                'unique' => 'NPSN sudah terdaftar.',
+                                'required' => 'NPSN tidak boleh kosong.',
+                            ])
+                            ->unique(ignoreRecord: true),
+                        Forms\Components\Select::make('bentuk_pendidikan')
+                            ->options([
+                                'TK' => 'TK',
+                                'KB' => 'KB',
+                                'TPA' => 'TPA',
+                                'SMK' => 'SMK',
+                                'PKBM' => 'PKBM',
+                                'SLB' => 'SLB',
+                                'SKB' => 'SKB',
+                                'SD' => 'SD',
+                                'SMP' => 'SMP',
+                                'SMA' => 'SMA',
+                            ])
+                            ->validationMessages([
+                                'required' => 'Bentuk Pendidikan tidak boleh kosong.',
+                            ])
+                            ->searchable()
+                            ->required(),
 
-                Forms\Components\Select::make('status')
-                    ->options([
-                        'Negeri' => 'Negeri',
-                        'Swasta' => 'Swasta',
-                    ])
-                    ->validationMessages([
-                        'required' => 'Status tidak boleh kosong.',
-                    ])
-                    ->required(),
+                        Forms\Components\Select::make('status')
+                            ->options([
+                                'Negeri' => 'Negeri',
+                                'Swasta' => 'Swasta',
+                            ])
+                            ->validationMessages([
+                                'required' => 'Status tidak boleh kosong.',
+                            ])
+                            ->required(),
 
-                Forms\Components\Select::make('kecamatan_id')
-                    ->label('Kecamatan')
-                    ->relationship('kecamatan', 'nama_kecamatan')
-                    ->validationMessages([
-                        'required' => 'Kecamatan tidak boleh kosong.',
-                    ])
-                    ->searchable()
-                    ->preload()
-                    ->required(),
-                ])->columns(2),
+                        Forms\Components\Select::make('kecamatan_id')
+                            ->label('Kecamatan')
+                            ->relationship('kecamatan', 'nama_kecamatan')
+                            ->validationMessages([
+                                'required' => 'Kecamatan tidak boleh kosong.',
+                            ])
+                            ->searchable()
+                            ->preload()
+                            ->required(),
+                    ])->columns(2),
             ]);
     }
     public static function infolist(Infolist $infolist): Infolist
@@ -230,7 +232,12 @@ class SekolahResource extends Resource
     }
     public static function getRecordSubNavigation(Page $page): array
     {
-        return $page->generateNavigationItems([
+        $user = \Illuminate\Support\Facades\Auth::user();
+        if ($user->role === 'guest') {
+            return [];
+        }
+
+        return  $page->generateNavigationItems([
             Pages\ViewSekolah::class,
             Pages\EditSekolah::class,
         ]);
@@ -258,5 +265,40 @@ class SekolahResource extends Resource
             'edit' => Pages\EditSekolah::route('/{record}/edit'),
             'view' => Pages\ViewSekolah::route('/{record}'),
         ];
+    }
+    public static function canViewAny(): bool
+    {
+        return \Illuminate\Support\Facades\Auth::check();
+        // return \Illuminate\Support\Facades\Auth::user()?->role !== 'admin_sekolah';
+    }
+    
+    public static function canView(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        $user = \Illuminate\Support\Facades\Auth::user();
+        return in_array($user->role,['superadmin','guest'])  || ($user->role === 'admin_sekolah' && $user->sekolah_id === $record->id);
+    }
+
+    public static function canCreate(): bool
+    {
+        return \Illuminate\Support\Facades\Auth::user()?->role === 'superadmin';
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        $user = \Illuminate\Support\Facades\Auth::user();
+        return $user->role === 'superadmin' || ($user->role === 'admin_sekolah' && $user->sekolah_id === $record->id);
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return \Illuminate\Support\Facades\Auth::user()?->role === 'superadmin';
+    }
+    public static function shouldRegisterNavigation(): bool
+    {
+        $user = \Illuminate\Support\Facades\Auth::user();
+        if ($user->role === 'admin_sekolah') {
+            return false;
+        }
+        return true;
     }
 }
