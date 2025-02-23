@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role', // ✅ Added role
     ];
 
     /**
@@ -34,7 +35,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
      * @return array<string, string>
      */
@@ -43,10 +44,15 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'role' => 'string', // ✅ Ensure role is cast to a string
         ];
     }
+
+    /**
+     * Relationship with Sekolah
+     */
     public function sekolah()
-{
-    return $this->hasOne(Sekolah::class);
-}
+    {
+        return $this->hasOne(Sekolah::class);
+    }
 }
