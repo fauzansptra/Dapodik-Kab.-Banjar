@@ -25,7 +25,7 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-
+                
             ]);
     }
 
@@ -34,13 +34,27 @@ class UserResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
-                ->label('Nama')
-                ->searchable()
-                ->sortable(),
+                    ->label('Nama')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('email')
-                ->label('Email')
-                ->searchable()
-                ->sortable(),
+                    ->label('Email')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('role')
+                    ->label('Role')
+                    ->searchable()
+                    ->sortable()
+                    ->formatStateUsing(fn($state) => $state === 'admin_sekolah' ? 'Admin Sekolah' : ucfirst($state)),
+                TextColumn::make('Sekolah.nama_sekolah')
+                    ->label('Admin Sekolah')
+                    ->searchable()
+                    // ->formatStateUsing(
+                    //     fn($state, $record) =>
+                    //     $record->sekolah_id!==null ? $state : '-'
+                    // )
+                    ->default(fn($record)=>
+                    $record->role==='superadmin'?'Superadmin': ($record->role==='guest'?'Guest':'-')),
             ])
             ->filters([
                 //
@@ -70,7 +84,7 @@ class UserResource extends Resource
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
-    
+
     // public static function shouldRegisterNavigation(): bool
     // {
     //     $user = \Illuminate\Support\Facades\Auth::user();
@@ -79,5 +93,5 @@ class UserResource extends Resource
     //     }
     //     return static::canAccessClusteredComponents();
     // }
-    
+
 }
