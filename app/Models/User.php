@@ -47,6 +47,7 @@ class User extends Authenticatable
     }
     public function sekolah()
 {
-    return $this->hasOne(Sekolah::class);
+    // return $this->hasOne(Sekolah::class);
+    return $this->belongsTo(Sekolah::class);
 }
 }
