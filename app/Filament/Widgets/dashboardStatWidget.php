@@ -33,19 +33,26 @@ class DashboardStatWidget extends BaseWidget
 
         return [
             Stat::make('Jumlah Siswa', $totalSiswa)
-                ->color('primary'),
+                ->color('primary')
+                ->icon('heroicon-s-academic-cap'),
             Stat::make('Jumlah Guru', $totalGuru)
-                ->color('success'),
+                ->color('success')
+                ->icon('heroicon-s-user-group'),
             Stat::make('Jumlah Pegawai', $totalPegawai)
-                ->color('warning'),
+                ->color('warning')
+                ->icon('heroicon-s-users'),
             Stat::make('Jumlah Rombel', $totalRombel)
-                ->color('danger'),
+                ->color('danger')
+                ->icon('heroicon-m-rectangle-stack'),
             Stat::make('Jumlah Kelas', $totalKelas)
-                ->color('primary'),
+                ->color('primary')
+                ->icon('heroicon-s-academic-cap'),
             Stat::make('Jumlah Lab', $totalLab)
-                ->color('success'),
+                ->color('success')
+                ->icon('heroicon-s-beaker'),
             Stat::make('Jumlah Perpustakaan', $totalPerpustakaan)
-                ->color('warning'),
+                ->color('warning')
+                ->icon('heroicon-s-book-open'),
         ];
     }
 }
