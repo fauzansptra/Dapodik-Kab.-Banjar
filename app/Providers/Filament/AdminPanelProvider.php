@@ -31,8 +31,10 @@ class AdminPanelProvider extends PanelProvider
             ->path('/data')
             ->login(Login::class)
             ->brandName('DAPODIK Kabupaten Banjar')
+            // ->brandLogo(asset('images/brand_logo.svg')) // Custom favicon
+            ->favicon(asset('images/brand_logo.svg')) // Replace with your favicon file
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Sky,
             ])
             ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
