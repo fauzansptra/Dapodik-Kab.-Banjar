@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Welcome to MyWebsite')
+@section('title', 'Sekolah Banjar')
 
 @section('content')
 
