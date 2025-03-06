@@ -29,9 +29,14 @@ class SekolahSeeder extends Seeder
             $sheet = $spreadsheet->getActiveSheet();
             $rows = $sheet->toArray(null, true, true, true);
 
+            $counter=0;
+            $maxRows=300;
             foreach ($rows as $index => $row) {
                 if ($index == 1) continue; // Skip header row
-
+                if ($counter >= $maxRows) {
+                    dump("✅ Stopping after processing {$maxRows} rows.");
+                    break;
+                }
                 try {
                     $namaSekolah = trim($row['B'] ?? '');
                     $npsn = trim($row['C'] ?? '');
@@ -116,6 +121,7 @@ class SekolahSeeder extends Seeder
                             'jml_perpustakaan'   => $jumlahPerpustakaan,  // Added
                         ]
                     );
+                    $counter++;
                 } catch (\Exception $e) {
                     dump("❌ Error in row {$index}: {$e->getMessage()}");
                     $hasError = true;
