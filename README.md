@@ -47,10 +47,7 @@ composer install
 ### 3. Jalankan Migrasi dan Seeder
 
 Setelah konfigurasi .env benar, jalankan perintah berikut:
-Baru:
+
 php artisan migrate --seed
-npm install
-Update:
-artisan migrate:fresh --seed
-npm install
+
 Perintah ini akan membuat tabel di database dan mengisi data awal.
