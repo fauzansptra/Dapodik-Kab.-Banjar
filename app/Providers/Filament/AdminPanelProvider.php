@@ -28,7 +28,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            ->path('')
+            ->path('/data')
             ->login(Login::class)
             ->brandName('DAPODIK Kabupaten Banjar')
             ->colors([
