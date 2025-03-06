@@ -9,19 +9,16 @@ use App\Models\User;
 
 class Login extends BaseLogin
 {
-    protected function getFormSchema(): array
+
+    protected function getFormActions(): array
     {
         return [
-            Forms\Components\TextInput::make('email')
-                ->email()
-                ->required()
-                ->autocomplete(),
-            Forms\Components\TextInput::make('password')
-                ->password()
-                ->required(),
-            Forms\Components\Actions\Action::make('guestLogin')
-                ->label('Login as Guest')
-                ->action(fn() => $this->authenticateGuest())
+            $this->getAuthenticateFormAction(),
+            \Filament\Actions\Action::make('guestLogin')
+            ->label('Masuk Sebagai Tamu')
+            ->icon('heroicon-s-user')
+            ->color('info')
+            ->action(fn() => $this->authenticateGuest())
         ];
     }
 
