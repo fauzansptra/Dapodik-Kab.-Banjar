@@ -14,10 +14,14 @@ class DashboardWidget extends BaseWidget
     {
         return [
             Stat::make('Jumlah Sekolah', Sekolah::count())
-                ->color('primary'),
+                ->color('primary')
+                ->icon('heroicon-s-home'),
             stat::make('Jumlah Tahun', Tahun::count())
-                ->color('primary'),
+                ->color('primary')
+                ->icon('heroicon-s-calendar'),
             stat::make('Jumlah Kecamatan', Kecamatan::count())
+            ->color('primary')
+            ->icon('heroicon-s-map-pin'),
         ];
     }
 }
