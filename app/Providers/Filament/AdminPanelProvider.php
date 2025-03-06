@@ -32,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->login(Login::class)
             ->brandName('DAPODIK Kabupaten Banjar')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Sky,
             ])
             ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
