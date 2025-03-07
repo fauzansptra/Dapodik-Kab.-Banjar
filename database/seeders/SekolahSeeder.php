@@ -30,7 +30,7 @@ class SekolahSeeder extends Seeder
             $rows = $sheet->toArray(null, true, true, true);
 
             $counter=0;
-            $maxRows=300;
+            $maxRows=1000;
             foreach ($rows as $index => $row) {
                 if ($index == 1) continue; // Skip header row
                 if ($counter >= $maxRows) {
