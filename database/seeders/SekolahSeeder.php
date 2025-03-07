@@ -92,7 +92,7 @@ class SekolahSeeder extends Seeder
 
                     // Find or create Sekolah
                     $sekolah = Sekolah::firstOrCreate(
-                        ['NPSN' => $npsn],
+                        ['npsn' => $npsn],
                         [
                             'nama_sekolah'       => $namaSekolah,
                             'bentuk_pendidikan'  => $bentukPendidikan,

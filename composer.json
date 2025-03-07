@@ -40,12 +40,12 @@
     "scripts": {
         "deploy": [
             "@php artisan migrate --force",
+            "@php artisan db:seed --force",
             "@php artisan config:clear",
             "@php artisan cache:clear",
             "@php artisan route:clear",
             "@php artisan view:clear",
-            "@php artisan optimize",
-            "@php artisan db:seed --force"
+            "@php artisan optimize"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
