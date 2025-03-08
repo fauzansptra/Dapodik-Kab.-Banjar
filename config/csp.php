@@ -1,4 +1,5 @@
 <?php
+use Spatie\Csp\Directives;
 
 return [
 
@@ -6,8 +7,15 @@ return [
      * A policy will determine which CSP headers will be set. A valid CSP policy is
      * any class that extends `Spatie\Csp\Policies\Policy`
      */
-    'policy' => App\Policies\ContentSecurityPolicy::class,
-
+  'policy' => [
+        Directives::SCRIPT => [
+            'self',
+            'https://cdn.jsdelivr.net', // Allow external script sources
+            'https://unpkg.com',
+            'https://cdnjs.cloudflare.com',
+            'sha256-randomhash' // Replace with actual SHA hash of the inline script if needed
+        ],
+    ],
     /*
      * This policy which will be put in report only mode. This is great for testing out
      * a new policy or changes to existing csp policy without breaking anything.
