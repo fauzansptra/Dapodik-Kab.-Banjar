@@ -19,6 +19,9 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Pages\Auth\Login;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Spatie\Csp\AddCspHeaders;
+
 
 
 class AdminPanelProvider extends PanelProvider
@@ -26,6 +29,9 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
+        ->middleware([
+            AddCspHeaders::class,
+        ])
             ->default()
             ->id('admin')
             ->path('/data')
