@@ -20,6 +20,8 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Pages\Auth\Login;
 use Illuminate\Support\Facades\Auth;
 
+use Spatie\Csp\AddCspHeaders;
+
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -64,6 +66,7 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                AddCspHeaders::class, // Add this line
             ])
             ->authMiddleware([
                 Authenticate::class,
