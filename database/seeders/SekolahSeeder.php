@@ -30,7 +30,7 @@ class SekolahSeeder extends Seeder
             $rows = $sheet->toArray(null, true, true, true);
 
             $counter=0;
-            $maxRows=300;
+            $maxRows=1000;
             foreach ($rows as $index => $row) {
                 if ($index == 1) continue; // Skip header row
                 if ($counter >= $maxRows) {
@@ -92,7 +92,7 @@ class SekolahSeeder extends Seeder
 
                     // Find or create Sekolah
                     $sekolah = Sekolah::firstOrCreate(
-                        ['NPSN' => $npsn],
+                        ['npsn' => $npsn],
                         [
                             'nama_sekolah'       => $namaSekolah,
                             'bentuk_pendidikan'  => $bentukPendidikan,
