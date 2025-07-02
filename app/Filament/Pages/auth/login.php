@@ -21,6 +21,7 @@ class Login extends BaseLogin
             ->action(fn() => $this->authenticateGuest())
         ];
     }
+    
 
     protected function authenticateGuest()
     {

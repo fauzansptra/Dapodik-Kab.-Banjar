@@ -35,7 +35,7 @@ class SekolahResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
     protected static ?string $navigationGroup = 'Data Utama';
 
-    protected static string $title = 'Sekolah';
+    protected static string $title = 'Sekolah sana';
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
